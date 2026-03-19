@@ -2,6 +2,48 @@
 
 모든 주요 변경 사항을 이 파일에 기록합니다.
 
+## [2026-03-19] - Frontend Service Layer PDCA Complete
+
+### Added
+
+- `apps/web/src/services/auth/queries.ts`: 뮤테이션 옵션 팩토리 (loginMutationOptions, logoutMutationOptions)
+- `home.tsx` 로그아웃 버튼 및 로그아웃 기능
+- 서비스 레이어 패턴 문서화 (plan.md: 옵션 팩토리 패턴, 훅 선언 규칙)
+- 완료 보고서: `docs/04-report/features/frontend-service-layer.report.md`
+
+### Changed
+
+- `apps/web/src/components/login-form.tsx`: API 직접 호출 제거 → useMutation + 옵션 팩토리 적용
+- `apps/web/src/pages/home.tsx`: API 직접 호출 제거 → useMutation + 옵션 팩토리 적용
+- import 의존성 재정리 (api → services/auth/queries)
+
+### Convention Compliance
+
+- TypeScript strict mode: 0 errors ✅
+- any 타입: 0 ✅
+- console.log: 0 ✅
+- React import in queries.ts: 0 ✅
+- 파일명: 모두 kebab-case ✅
+
+### Quality Metrics
+
+- **Match Rate**: 100% (Design ↔ Implementation)
+- **FR Completion**: 9/9 (100%)
+- **NFR Completion**: 4/4 (100%)
+- **E2E Tests**: 4/4 passed ✅
+- **Files Created**: 1
+- **Files Modified**: 2
+
+### PDCA Completion
+
+- Plan: [frontend-service-layer.plan.md](../01-plan/features/frontend-service-layer.plan.md) ✅ Approved
+- Design: [frontend-service-layer.design.md](../02-design/features/frontend-service-layer.design.md) ✅ Approved
+- Do: Implementation Complete ✅
+- Check: Gap Analysis (100% match) ✅
+- Report: [frontend-service-layer.report.md](./features/frontend-service-layer.report.md) ✅ Completed
+
+---
+
 ## [2026-03-19] - Shared Zod Schemas PDCA Complete
 
 ### Added

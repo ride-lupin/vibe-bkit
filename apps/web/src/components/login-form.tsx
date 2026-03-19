@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
-import { LoginSchema, type Login, type LoginResponse } from '@vibe-bkit/shared'
-import { api } from '@/lib/api'
+import { useMutation } from '@tanstack/react-query'
+import { LoginSchema, type Login } from '@vibe-bkit/shared'
 import { useAuthStore } from '@/stores/auth-store'
+import { loginMutationOptions } from '@/services/auth/queries'
 
 export function LoginForm() {
   const navigate = useNavigate()
@@ -14,20 +15,25 @@ export function LoginForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<Login>({
     resolver: zodResolver(LoginSchema),
   })
 
-  const onSubmit = async (data: Login) => {
-    setServerError(null)
-    try {
-      const res = await api.post('auth/login', { json: data }).json<LoginResponse>()
+  const loginMutation = useMutation({
+    ...loginMutationOptions(),
+    onSuccess: (res) => {
       setAccessToken(res.data.accessToken)
       navigate('/')
-    } catch {
+    },
+    onError: () => {
       setServerError('이메일 또는 비밀번호가 올바르지 않습니다')
-    }
+    },
+  })
+
+  const onSubmit = (data: Login) => {
+    setServerError(null)
+    loginMutation.mutate(data)
   }
 
   return (
@@ -65,10 +71,10 @@ export function LoginForm() {
 
       <button
         type="submit"
-        disabled={isSubmitting}
+        disabled={loginMutation.isPending}
         style={{ padding: '0.75rem', cursor: 'pointer' }}
       >
-        {isSubmitting ? '로그인 중...' : '로그인'}
+        {loginMutation.isPending ? '로그인 중...' : '로그인'}
       </button>
     </form>
   )
