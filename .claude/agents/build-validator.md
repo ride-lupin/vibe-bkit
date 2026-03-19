@@ -16,6 +16,7 @@ description: Use this agent PROACTIVELY after implementing new features or makin
 ## 실패 처리
 
 각 단계에서 실패 시:
+
 - 오류 내용 분석
 - 수정 방법 제안
 - 수정 후 재검증

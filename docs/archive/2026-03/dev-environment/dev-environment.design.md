@@ -91,11 +91,11 @@ pnpm build
 
 ### 2.3 패키지 의존성
 
-| 패키지 | 의존 패키지 | 용도 |
-|--------|------------|------|
-| `apps/web` | `packages/shared` | Zod 스키마, 공유 타입 |
-| `apps/api` | `packages/shared` | Zod 스키마 검증, 공유 타입 |
-| `packages/shared` | 없음 | 독립 패키지 |
+| 패키지            | 의존 패키지       | 용도                       |
+| ----------------- | ----------------- | -------------------------- |
+| `apps/web`        | `packages/shared` | Zod 스키마, 공유 타입      |
+| `apps/api`        | `packages/shared` | Zod 스키마 검증, 공유 타입 |
+| `packages/shared` | 없음              | 독립 패키지                |
 
 ---
 
@@ -104,6 +104,7 @@ pnpm build
 ### 3.1 루트 설정 파일
 
 #### `pnpm-workspace.yaml`
+
 ```yaml
 packages:
   - 'apps/*'
@@ -111,6 +112,7 @@ packages:
 ```
 
 #### `turbo.json`
+
 ```json
 {
   "$schema": "https://turbo.build/schema.json",
@@ -139,6 +141,7 @@ packages:
 ```
 
 #### 루트 `package.json`
+
 ```json
 {
   "name": "vibe-bkit",
@@ -166,9 +169,11 @@ packages:
 ### 3.2 `packages/shared`
 
 #### 역할
+
 FE/BE 공유 Zod 스키마, TypeScript 타입, 유틸리티 함수
 
 #### 디렉토리 구조
+
 ```
 packages/shared/
 ├── src/
@@ -182,6 +187,7 @@ packages/shared/
 ```
 
 #### `package.json`
+
 ```json
 {
   "name": "@vibe-bkit/shared",
@@ -207,6 +213,7 @@ packages/shared/
 ```
 
 #### `tsconfig.json`
+
 ```json
 {
   "compilerOptions": {
@@ -223,12 +230,14 @@ packages/shared/
 ```
 
 #### `src/index.ts` (초기 헬스체크 스키마 예시)
+
 ```typescript
 export * from './schemas'
 export * from './types'
 ```
 
 #### `src/schemas/index.ts`
+
 ```typescript
 import { z } from 'zod'
 
@@ -245,6 +254,7 @@ export type Health = z.infer<typeof HealthSchema>
 ### 3.3 `apps/api` (Hono.js)
 
 #### 디렉토리 구조
+
 ```
 apps/api/
 ├── src/
@@ -263,6 +273,7 @@ apps/api/
 ```
 
 #### `package.json`
+
 ```json
 {
   "name": "@vibe-bkit/api",
@@ -295,6 +306,7 @@ apps/api/
 ```
 
 #### `tsconfig.json`
+
 ```json
 {
   "compilerOptions": {
@@ -310,6 +322,7 @@ apps/api/
 ```
 
 #### `src/index.ts`
+
 ```typescript
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
@@ -331,6 +344,7 @@ export type AppType = typeof app
 ```
 
 #### `src/routes/health.ts`
+
 ```typescript
 import { Hono } from 'hono'
 import { HealthSchema } from '@vibe-bkit/shared'
@@ -347,6 +361,7 @@ healthRoute.get('/', (c) => {
 ```
 
 #### `src/db/index.ts`
+
 ```typescript
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
@@ -359,6 +374,7 @@ export const db = drizzle(client, { schema })
 ```
 
 #### `src/db/schema.ts`
+
 ```typescript
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
@@ -371,6 +387,7 @@ export const healthLogs = pgTable('health_logs', {
 ```
 
 #### `drizzle.config.ts`
+
 ```typescript
 import type { Config } from 'drizzle-kit'
 
@@ -389,6 +406,7 @@ export default {
 ### 3.4 `apps/web` (React 19 + Vite)
 
 #### 디렉토리 구조
+
 ```
 apps/web/
 ├── src/
@@ -410,6 +428,7 @@ apps/web/
 ```
 
 #### `package.json`
+
 ```json
 {
   "name": "@vibe-bkit/web",
@@ -450,6 +469,7 @@ apps/web/
 ```
 
 #### `tsconfig.json`
+
 ```json
 {
   "compilerOptions": {
@@ -470,6 +490,7 @@ apps/web/
 ```
 
 #### `vite.config.ts`
+
 ```typescript
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
@@ -496,12 +517,14 @@ export default defineConfig({
 ```
 
 #### `src/index.css` (Tailwind v4)
+
 ```css
-@import "tailwindcss";
-@import "@radix-ui/themes/styles.css";
+@import 'tailwindcss';
+@import '@radix-ui/themes/styles.css';
 ```
 
 #### `src/main.tsx`
+
 ```typescript
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -529,6 +552,7 @@ createRoot(document.getElementById('root')!).render(
 ```
 
 #### `src/lib/api.ts`
+
 ```typescript
 import ky from 'ky'
 
@@ -538,6 +562,7 @@ export const api = ky.create({
 ```
 
 #### `src/App.tsx` (초기 헬스체크 UI)
+
 ```typescript
 import { useQuery } from '@tanstack/react-query'
 import type { Health } from '@vibe-bkit/shared'
@@ -568,6 +593,7 @@ export default function App() {
 ### 3.5 Docker Compose
 
 #### `docker-compose.yml`
+
 ```yaml
 services:
   postgres:
@@ -596,6 +622,7 @@ volumes:
 ### 3.6 환경 변수
 
 #### `.env.example`
+
 ```bash
 # FE (apps/web) — VITE_ 접두사 필수
 VITE_API_URL=http://localhost:3000
@@ -617,13 +644,14 @@ POSTGRES_PORT=5432
 
 ### 4.1 엔드포인트 목록 (초기 환경 확인용)
 
-| Method | Path | Description | Auth |
-|--------|------|-------------|------|
-| GET | /health | API 서버 헬스체크 | 불필요 |
+| Method | Path    | Description       | Auth   |
+| ------ | ------- | ----------------- | ------ |
+| GET    | /health | API 서버 헬스체크 | 불필요 |
 
 ### 4.2 `GET /health`
 
 **Response (200 OK):**
+
 ```json
 {
   "status": "ok",
@@ -674,13 +702,13 @@ const queryClient = new QueryClient({
 
 ## 7. 테스트 계획
 
-| 유형 | 대상 | 도구 | 확인 항목 |
-|------|------|------|-----------|
-| 수동 테스트 | `GET /health` | curl / 브라우저 | JSON 응답 확인 |
-| 수동 테스트 | React 앱 | 브라우저 | API 상태 화면 렌더링 |
-| 타입 검사 | 전체 패키지 | `pnpm typecheck` | 0 errors |
-| 린트 | 전체 패키지 | `pnpm lint` | 0 errors |
-| 빌드 | 전체 패키지 | `pnpm build` | 성공 |
+| 유형        | 대상          | 도구             | 확인 항목            |
+| ----------- | ------------- | ---------------- | -------------------- |
+| 수동 테스트 | `GET /health` | curl / 브라우저  | JSON 응답 확인       |
+| 수동 테스트 | React 앱      | 브라우저         | API 상태 화면 렌더링 |
+| 타입 검사   | 전체 패키지   | `pnpm typecheck` | 0 errors             |
+| 린트        | 전체 패키지   | `pnpm lint`      | 0 errors             |
+| 빌드        | 전체 패키지   | `pnpm build`     | 성공                 |
 
 ---
 
@@ -706,6 +734,6 @@ const queryClient = new QueryClient({
 
 ## Version History
 
-| Version | Date | Changes | Author |
-|---------|------|---------|--------|
-| 0.1 | 2026-03-19 | Initial draft | lupin |
+| Version | Date       | Changes       | Author |
+| ------- | ---------- | ------------- | ------ |
+| 0.1     | 2026-03-19 | Initial draft | lupin  |

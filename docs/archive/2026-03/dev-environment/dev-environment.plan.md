@@ -22,12 +22,12 @@ status: Draft
 
 ## Executive Summary
 
-| Perspective | Content |
-|-------------|---------|
-| **Problem** | 빈 레포에서 프론트엔드(React 19+Vite)와 백엔드(Hono.js)를 동시에 개발할 수 있는 모노레포 구조가 없음 |
-| **Solution** | Turborepo + pnpm workspace로 `apps/web`, `apps/api`, `packages/shared` 3개 패키지를 구성 |
-| **Function/UX Effect** | `pnpm dev` 한 명령으로 FE+BE 동시 실행, 공유 타입·Zod 스키마를 즉시 활용 가능 |
-| **Core Value** | 일관된 TypeScript strict 환경에서 FE/BE가 스키마를 공유하며 타입 안전하게 협업 |
+| Perspective            | Content                                                                                              |
+| ---------------------- | ---------------------------------------------------------------------------------------------------- |
+| **Problem**            | 빈 레포에서 프론트엔드(React 19+Vite)와 백엔드(Hono.js)를 동시에 개발할 수 있는 모노레포 구조가 없음 |
+| **Solution**           | Turborepo + pnpm workspace로 `apps/web`, `apps/api`, `packages/shared` 3개 패키지를 구성             |
+| **Function/UX Effect** | `pnpm dev` 한 명령으로 FE+BE 동시 실행, 공유 타입·Zod 스키마를 즉시 활용 가능                        |
+| **Core Value**         | 일관된 TypeScript strict 환경에서 FE/BE가 스키마를 공유하며 타입 안전하게 협업                       |
 
 ---
 
@@ -80,25 +80,25 @@ Turborepo 모노레포 환경을 구성하여 React 19 + Vite 프론트엔드와
 
 ### 3.1 Functional Requirements
 
-| ID | Requirement | Priority | Status |
-|----|-------------|----------|--------|
-| FR-01 | `pnpm dev` 실행 시 FE(port 5173) + BE(port 3000) 동시 구동 | High | Pending |
-| FR-02 | `packages/shared`의 타입/스키마를 FE·BE에서 import 가능 | High | Pending |
-| FR-03 | `pnpm typecheck` 실행 시 전체 패키지 타입 검사 통과 | High | Pending |
-| FR-04 | `pnpm build` 실행 시 Turbo 캐시 기반 전체 빌드 성공 | High | Pending |
-| FR-05 | `docker-compose up -d` 로 PostgreSQL 로컬 DB 실행 | Medium | Pending |
-| FR-06 | `apps/api`에서 Drizzle ORM으로 DB 연결 확인 | Medium | Pending |
-| FR-07 | `pnpm lint` 실행 시 전체 패키지 lint 통과 | Medium | Pending |
-| FR-08 | Tailwind CSS v4 및 Radix UI 기본 컴포넌트 렌더링 확인 | Medium | Pending |
+| ID    | Requirement                                                | Priority | Status  |
+| ----- | ---------------------------------------------------------- | -------- | ------- |
+| FR-01 | `pnpm dev` 실행 시 FE(port 5173) + BE(port 3000) 동시 구동 | High     | Pending |
+| FR-02 | `packages/shared`의 타입/스키마를 FE·BE에서 import 가능    | High     | Pending |
+| FR-03 | `pnpm typecheck` 실행 시 전체 패키지 타입 검사 통과        | High     | Pending |
+| FR-04 | `pnpm build` 실행 시 Turbo 캐시 기반 전체 빌드 성공        | High     | Pending |
+| FR-05 | `docker-compose up -d` 로 PostgreSQL 로컬 DB 실행          | Medium   | Pending |
+| FR-06 | `apps/api`에서 Drizzle ORM으로 DB 연결 확인                | Medium   | Pending |
+| FR-07 | `pnpm lint` 실행 시 전체 패키지 lint 통과                  | Medium   | Pending |
+| FR-08 | Tailwind CSS v4 및 Radix UI 기본 컴포넌트 렌더링 확인      | Medium   | Pending |
 
 ### 3.2 Non-Functional Requirements
 
-| Category | Criteria | Measurement Method |
-|----------|----------|-------------------|
-| 개발 경험 | `pnpm dev` cold start < 5초 | 터미널 실행 시간 측정 |
+| Category    | Criteria                           | Measurement Method        |
+| ----------- | ---------------------------------- | ------------------------- |
+| 개발 경험   | `pnpm dev` cold start < 5초        | 터미널 실행 시간 측정     |
 | 타입 안전성 | TypeScript strict mode, `any` 금지 | `pnpm typecheck` 0 errors |
-| 코드 품질 | ESLint 0 errors, Prettier 적용 | `pnpm lint` 통과 |
-| 빌드 재현성 | Turbo 캐시로 재빌드 속도 80% 단축 | 캐시 히트율 |
+| 코드 품질   | ESLint 0 errors, Prettier 적용     | `pnpm lint` 통과          |
+| 빌드 재현성 | Turbo 캐시로 재빌드 속도 80% 단축  | 캐시 히트율               |
 
 ---
 
@@ -124,12 +124,12 @@ Turborepo 모노레포 환경을 구성하여 React 19 + Vite 프론트엔드와
 
 ## 5. Risks and Mitigation
 
-| Risk | Impact | Likelihood | Mitigation |
-|------|--------|------------|------------|
-| Tailwind CSS v4 API 변경 (v3과 다름) | Medium | High | `@tailwindcss/vite` 플러그인 사용, v4 공식 문서 참조 |
-| pnpm workspace 패키지 간 타입 해석 오류 | High | Medium | `tsconfig.json` `paths` 설정 및 `composite: true` 적용 |
-| Drizzle ORM + Hono.js 버전 충돌 | Medium | Low | 최신 stable 버전 고정, lockfile 관리 |
-| Docker PostgreSQL 포트 충돌 (5432) | Low | Low | `docker-compose.yml`에서 포트 커스터마이징 가능하도록 `.env` 변수 사용 |
+| Risk                                    | Impact | Likelihood | Mitigation                                                             |
+| --------------------------------------- | ------ | ---------- | ---------------------------------------------------------------------- |
+| Tailwind CSS v4 API 변경 (v3과 다름)    | Medium | High       | `@tailwindcss/vite` 플러그인 사용, v4 공식 문서 참조                   |
+| pnpm workspace 패키지 간 타입 해석 오류 | High   | Medium     | `tsconfig.json` `paths` 설정 및 `composite: true` 적용                 |
+| Drizzle ORM + Hono.js 버전 충돌         | Medium | Low        | 최신 stable 버전 고정, lockfile 관리                                   |
+| Docker PostgreSQL 포트 충돌 (5432)      | Low    | Low        | `docker-compose.yml`에서 포트 커스터마이징 가능하도록 `.env` 변수 사용 |
 
 ---
 
@@ -137,25 +137,25 @@ Turborepo 모노레포 환경을 구성하여 React 19 + Vite 프론트엔드와
 
 ### 6.1 Project Level Selection
 
-| Level | Characteristics | Selected |
-|-------|-----------------|:--------:|
-| **Starter** | 단순 구조 | ☐ |
-| **Dynamic** | Feature 기반 모듈, BaaS 통합 | ☑ |
-| **Enterprise** | 레이어 분리, DI, 마이크로서비스 | ☐ |
+| Level          | Characteristics                 | Selected |
+| -------------- | ------------------------------- | :------: |
+| **Starter**    | 단순 구조                       |    ☐     |
+| **Dynamic**    | Feature 기반 모듈, BaaS 통합    |    ☑     |
+| **Enterprise** | 레이어 분리, DI, 마이크로서비스 |    ☐     |
 
 > **선택**: Dynamic — Turborepo 모노레포 구조이지만 현재 단계는 MVP 수준의 풀스택 앱
 
 ### 6.2 Key Architectural Decisions
 
-| Decision | Options | Selected | Rationale |
-|----------|---------|----------|-----------|
-| 모노레포 도구 | Turborepo / Nx / Lerna | **Turborepo** | 빠른 캐시 빌드, 설정 단순 |
-| FE 프레임워크 | Next.js / React+Vite / Remix | **React 19 + Vite** | CLAUDE.md 정의 스택 |
-| BE 프레임워크 | Express / Fastify / Hono | **Hono.js** | 경량, TypeScript 네이티브, Edge 지원 |
-| 패키지 매니저 | npm / yarn / pnpm | **pnpm** | workspace 지원, 디스크 절약 |
-| ORM | Prisma / Drizzle / TypeORM | **Drizzle ORM** | TypeScript 타입 안전, 경량 |
-| 스타일링 | Tailwind v3 / Tailwind v4 / CSS Modules | **Tailwind CSS v4** | CLAUDE.md 정의 스택 |
-| UI 컴포넌트 | shadcn/ui / Radix UI / MUI | **Radix UI** | 접근성 + 커스터마이징 |
+| Decision      | Options                                 | Selected            | Rationale                            |
+| ------------- | --------------------------------------- | ------------------- | ------------------------------------ |
+| 모노레포 도구 | Turborepo / Nx / Lerna                  | **Turborepo**       | 빠른 캐시 빌드, 설정 단순            |
+| FE 프레임워크 | Next.js / React+Vite / Remix            | **React 19 + Vite** | CLAUDE.md 정의 스택                  |
+| BE 프레임워크 | Express / Fastify / Hono                | **Hono.js**         | 경량, TypeScript 네이티브, Edge 지원 |
+| 패키지 매니저 | npm / yarn / pnpm                       | **pnpm**            | workspace 지원, 디스크 절약          |
+| ORM           | Prisma / Drizzle / TypeORM              | **Drizzle ORM**     | TypeScript 타입 안전, 경량           |
+| 스타일링      | Tailwind v3 / Tailwind v4 / CSS Modules | **Tailwind CSS v4** | CLAUDE.md 정의 스택                  |
+| UI 컴포넌트   | shadcn/ui / Radix UI / MUI              | **Radix UI**        | 접근성 + 커스터마이징                |
 
 ### 6.3 Monorepo Folder Structure
 
@@ -210,24 +210,24 @@ vibe-bkit/
 
 ### 7.2 Conventions to Define
 
-| Category | Rule | Priority |
-|----------|------|:--------:|
-| **타입** | `type` 선호, `interface` 자제, `enum` 절대 금지 | High |
-| **네이밍** | 컴포넌트: PascalCase, 파일: kebab-case | High |
-| **폴더** | 기능별 모듈 (`features/`) 구조 | High |
-| **환경변수** | FE: `VITE_` 접두사, BE: 접두사 없음 | High |
-| **에러처리** | Hono `HTTPException`, FE `React Query` 에러 바운더리 | Medium |
+| Category     | Rule                                                 | Priority |
+| ------------ | ---------------------------------------------------- | :------: |
+| **타입**     | `type` 선호, `interface` 자제, `enum` 절대 금지      |   High   |
+| **네이밍**   | 컴포넌트: PascalCase, 파일: kebab-case               |   High   |
+| **폴더**     | 기능별 모듈 (`features/`) 구조                       |   High   |
+| **환경변수** | FE: `VITE_` 접두사, BE: 접두사 없음                  |   High   |
+| **에러처리** | Hono `HTTPException`, FE `React Query` 에러 바운더리 |  Medium  |
 
 ### 7.3 Environment Variables
 
-| Variable | Purpose | Scope |
-|----------|---------|-------|
-| `VITE_API_URL` | BE API 엔드포인트 | FE Client |
-| `DATABASE_URL` | PostgreSQL 연결 문자열 | BE Server |
-| `POSTGRES_USER` | DB 사용자명 | Docker |
-| `POSTGRES_PASSWORD` | DB 비밀번호 | Docker |
-| `POSTGRES_DB` | DB 이름 | Docker |
-| `PORT` | API 서버 포트 (기본 3000) | BE Server |
+| Variable            | Purpose                   | Scope     |
+| ------------------- | ------------------------- | --------- |
+| `VITE_API_URL`      | BE API 엔드포인트         | FE Client |
+| `DATABASE_URL`      | PostgreSQL 연결 문자열    | BE Server |
+| `POSTGRES_USER`     | DB 사용자명               | Docker    |
+| `POSTGRES_PASSWORD` | DB 비밀번호               | Docker    |
+| `POSTGRES_DB`       | DB 이름                   | Docker    |
+| `PORT`              | API 서버 포트 (기본 3000) | BE Server |
 
 ---
 
@@ -252,6 +252,6 @@ vibe-bkit/
 
 ## Version History
 
-| Version | Date | Changes | Author |
-|---------|------|---------|--------|
-| 0.1 | 2026-03-19 | Initial draft | lupin |
+| Version | Date       | Changes       | Author |
+| ------- | ---------- | ------------- | ------ |
+| 0.1     | 2026-03-19 | Initial draft | lupin  |
