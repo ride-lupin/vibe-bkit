@@ -1,0 +1,26 @@
+# 환경 변수
+.env
+.env.local
+.env.*.local
+
+# Claude Code 로컬 설정
+.claude/settings.local.json
+
+# bkit 런타임 상태
+.bkit/state/
+.bkit/runtime/
+.bkit/snapshots/
+
+# 의존성
+node_modules/
+
+# 빌드 결과물
+dist/
+.next/
+out/
+
+# 로그
+*.log
+
+# macOS
+.DS_Store
