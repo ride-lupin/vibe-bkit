@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch --env-file=.env.local src/index.ts",
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src",
@@ -12,13 +12,18 @@
   },
   "dependencies": {
     "@hono/node-server": "^1",
+    "@hono/zod-validator": "^0.7.6",
     "@vibe-bkit/shared": "workspace:*",
+    "bcryptjs": "^3.0.3",
     "drizzle-orm": "^0.38",
     "hono": "^4",
+    "jsonwebtoken": "^9.0.3",
     "postgres": "^3",
     "zod": "^3"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^3.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22",
     "drizzle-kit": "^0.30",
     "tsx": "^4",
