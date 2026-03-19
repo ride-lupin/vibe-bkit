@@ -18,31 +18,50 @@ bkit:pdca 스킬을 사용하여 다음 작업을 수행하세요: $ARGUMENTS
 
 ---
 
-## 프로젝트 로컬 규칙: Do 단계 테스트 동반 구현
+## PDCA 단계별 규칙
 
-`/pdca do {feature}` 실행 시 아래 규칙을 추가로 적용한다.
+### Do 단계 (`/pdca do {feature}`)
 
-### 구현과 함께 반드시 수행할 것
+**구현과 함께 반드시 수행할 것:**
 
-**1. 백엔드 코드를 구현하면 → Vitest 단위 테스트 작성 + 실행**
+#### 백엔드 (apps/api) — Vitest 단위 테스트
 
-- 위치: `apps/api/test/{domain}/{module}.test.ts`
-- 실행: `pnpm --filter @vibe-bkit/api test test/{domain}/{module}.test.ts`
+- 파일 위치: `apps/api/test/{domain}/{module}.test.ts`
+- DB 의존 없이 순수 로직 테스트 — `vi.hoisted()` + `vi.mock()`으로 DB/외부 의존성 목킹
+- Hono `app.request()`로 라우트 레벨 테스트 가능 (실 서버 불필요)
 
-**2. 프런트엔드 페이지/기능을 구현하면 → Playwright E2E 테스트 작성 + 실행**
+#### 프런트엔드 (apps/web) — Playwright E2E + Mock
 
-- 스펙: `apps/web/e2e/{domain}/{feature}.spec.ts`
-- Mock: `apps/web/e2e/mocks/{domain}.ts` (page.route() 기반)
-- Mock 응답 body는 `@vibe-bkit/shared`의 응답 타입을 `satisfies`로 적용
-- 실행: `pnpm --filter @vibe-bkit/web test e2e/{domain}/{feature}.spec.ts`
+- 스펙 파일: `apps/web/e2e/{domain}/{feature}.spec.ts`
+- Mock 파일: `apps/web/e2e/mocks/{domain}.ts` (`page.route()` 기반)
+- 실 서버 불필요 — 모든 API 응답을 `page.route()`로 인터셉트
 
-### Do 단계 완료 체크리스트
+#### Do 단계 완료 체크리스트
 
-구현 완료 후 아래 순서로 실행하고 모두 통과해야 Check 단계로 진행한다:
+**아래 3단계를 순서대로 실행하고, 하나라도 실패하면 즉시 중단하고 수정한다. 모두 통과한 후에만 `/pdca analyze`로 진행할 수 있다.**
 
 ```bash
-pnpm typecheck
-pnpm lint
-pnpm --filter @vibe-bkit/api test test/{domain}/{module}.test.ts
-pnpm --filter @vibe-bkit/web test e2e/{domain}/{feature}.spec.ts
+pnpm typecheck   # 1. 타입 오류 없음
+pnpm lint        # 2. 린트 통과
 ```
+
+3. **테스트**: 이번 작업에서 수정·추가한 파일의 도메인에 해당하는 테스트만 실행
+   - `apps/api/` 변경 시 → 해당 도메인 Vitest 실행
+     - 예: `apps/api/src/routes/auth.ts` 수정 → `pnpm --filter @vibe-bkit/api test test/auth/routes.test.ts`
+   - `apps/web/` 변경 시 → 해당 도메인 E2E 실행
+     - 예: `apps/web/src/components/login-form.tsx` 수정 → `pnpm --filter @vibe-bkit/web test e2e/auth/login.spec.ts`
+   - 해당 앱 변경 없으면 생략
+
+#### 실패 시 중단 보고 양식
+
+단계 실패 시 다음 양식으로 보고하고 즉시 수정에 착수한다:
+
+```
+🚫 Do 단계 중단
+- 실패 단계: {typecheck | build | lint | test}
+- 실패 파일: {파일 경로}
+- 오류 내용: {에러 메시지 또는 실패 이유 요약}
+- 조치 계획: {수정할 내용 한 줄 요약}
+```
+
+수정 완료 후 실패한 단계부터 체크리스트를 재실행한다.
