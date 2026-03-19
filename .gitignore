@@ -19,6 +19,9 @@ dist/
 .next/
 out/
 
+# Turborepo 캐시
+.turbo/
+
 # 로그
 *.log
 

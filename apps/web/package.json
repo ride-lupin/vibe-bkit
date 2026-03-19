@@ -1,0 +1,36 @@
+{
+  "name": "@vibe-bkit/web",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3",
+    "@radix-ui/themes": "^3",
+    "@tanstack/react-query": "^5",
+    "@tanstack/react-query-devtools": "^5",
+    "@vibe-bkit/shared": "workspace:*",
+    "ky": "^1",
+    "react": "^19",
+    "react-dom": "^19",
+    "react-hook-form": "^7",
+    "react-router-dom": "^7",
+    "zod": "^3",
+    "zustand": "^5"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^4",
+    "tailwindcss": "^4",
+    "typescript": "^5.7",
+    "vite": "^6"
+  }
+}
