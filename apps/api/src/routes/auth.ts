@@ -58,7 +58,13 @@ auth.post('/login', zValidator('json', LoginSchema), async (c) => {
     LoginResponseSchema.parse({
       data: {
         accessToken,
-        user: { id: user.id, email: user.email, name: user.name, role: user.role },
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          phone: user.phone,
+        },
       },
     }),
   )

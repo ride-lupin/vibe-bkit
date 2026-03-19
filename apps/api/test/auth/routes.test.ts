@@ -30,6 +30,7 @@ const TEST_USER = {
   email: 'user@example.com',
   name: 'Test User',
   role: 'user',
+  phone: '010-1234-5678',
   passwordHash: '$2b$10$hashedpassword',
 }
 

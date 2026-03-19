@@ -26,6 +26,7 @@ export {
   LoginSchema,
   PublicUserSchema,
   LoginResponseSchema,
+  ProfileResponseSchema,
 } from './user'
 
 export type {
@@ -36,6 +37,7 @@ export type {
   Login,
   PublicUser,
   LoginResponse,
+  ProfileResponse,
 } from './user'
 
 // Todo

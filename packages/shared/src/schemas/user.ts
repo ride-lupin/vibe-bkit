@@ -22,11 +22,15 @@ const passwordSchema = z
   .max(100)
   .regex(/^(?=.*[A-Za-z])(?=.*\d)/, '영문과 숫자를 모두 포함해야 합니다')
 
+/** 휴대폰 번호 검증 (한국 형식: 010-XXXX-XXXX) */
+const phoneSchema = z.string().regex(/^010-\d{4}-\d{4}$/, '010-XXXX-XXXX 형식으로 입력해 주세요')
+
 /** User 기본 엔티티 */
 export const UserSchema = BaseEntitySchema.extend({
   email: emailSchema,
   name: z.string().min(1).max(100),
   role: UserRoleSchema.default('user'),
+  phone: phoneSchema,
 })
 
 /** User 생성 입력 (회원가입) */
@@ -34,12 +38,14 @@ export const CreateUserSchema = z.object({
   email: emailSchema,
   name: z.string().min(1).max(100),
   password: passwordSchema,
+  phone: phoneSchema,
 })
 
 /** User 수정 입력 (프로필 업데이트) */
 export const UpdateUserSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   password: passwordSchema.optional(),
+  phone: phoneSchema.optional(),
 })
 
 /** 로그인 입력 */
@@ -56,6 +62,7 @@ export const PublicUserSchema = UserSchema.pick({
   email: true,
   name: true,
   role: true,
+  phone: true,
 })
 
 /** 로그인 성공 응답 */
@@ -65,6 +72,9 @@ export const LoginResponseSchema = apiResponseSchema(
     user: PublicUserSchema,
   }),
 )
+
+/** 프로필 조회 응답 */
+export const ProfileResponseSchema = apiResponseSchema(PublicUserSchema)
 
 // ============================================================
 // Inferred Types
@@ -77,3 +87,4 @@ export type UpdateUser = z.infer<typeof UpdateUserSchema>
 export type Login = z.infer<typeof LoginSchema>
 export type PublicUser = z.infer<typeof PublicUserSchema>
 export type LoginResponse = z.infer<typeof LoginResponseSchema>
+export type ProfileResponse = z.infer<typeof ProfileResponseSchema>

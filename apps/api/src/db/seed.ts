@@ -18,9 +18,13 @@ const db = drizzle(sql)
       passwordHash,
       name: '테스트 유저',
       role: 'user',
+      phone: '010-1234-5678',
     })
-    .onConflictDoNothing()
+    .onConflictDoUpdate({
+      target: users.email,
+      set: { phone: '010-1234-5678' },
+    })
 
-  console.log('✅ 테스트 계정 생성 완료: test@example.com / test1234!')
+  console.info('✅ 테스트 계정 완료: test@example.com / test1234! / 010-1234-5678')
   await sql.end()
 })()

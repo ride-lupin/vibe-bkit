@@ -6,7 +6,13 @@ const API_URL = process.env.VITE_API_URL ?? 'http://localhost:3000'
 const loginSuccessBody = {
   data: {
     accessToken: 'mock-access-token',
-    user: { id: 'user-1', email: 'user@example.com', name: 'Test User', role: 'user' as const },
+    user: {
+      id: 'user-1',
+      email: 'user@example.com',
+      name: 'Test User',
+      role: 'user' as const,
+      phone: '010-1234-5678',
+    },
   },
 } satisfies LoginResponse
 

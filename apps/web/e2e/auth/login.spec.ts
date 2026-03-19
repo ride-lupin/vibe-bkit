@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { mockLoginSuccess, mockLoginFailure } from '../mocks/auth'
+import { mockProfileSuccess } from '../mocks/user'
 
 test.describe('로그인 페이지', () => {
   test.beforeEach(async ({ page }) => {
@@ -15,11 +16,12 @@ test.describe('로그인 페이지', () => {
 
   test('성공 로그인 → / 이동 + 성공 메시지', async ({ page }) => {
     await mockLoginSuccess(page)
+    await mockProfileSuccess(page)
     await page.getByLabel('이메일').fill('user@example.com')
     await page.getByLabel('비밀번호').fill('password123')
     await page.getByRole('button', { name: '로그인' }).click()
     await expect(page).toHaveURL('/')
-    await expect(page.getByText('로그인에 성공했습니다')).toBeVisible()
+    await expect(page.getByRole('heading', { name: '홈' })).toBeVisible()
   })
 
   test('실패 로그인 → 에러 메시지 표시', async ({ page }) => {

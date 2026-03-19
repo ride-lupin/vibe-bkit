@@ -3,6 +3,7 @@ import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { healthRoute } from './routes/health'
 import authRoute from './routes/auth'
+import usersRoute from './routes/users'
 
 const app = new Hono()
 
@@ -16,6 +17,7 @@ app.use(
 )
 app.route('/health', healthRoute)
 app.route('/auth', authRoute)
+app.route('/users', usersRoute)
 
 app.onError((err, c) => {
   console.error('[ERROR]', err)
