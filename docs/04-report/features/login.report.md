@@ -1,21 +1,21 @@
 ---
 template: report
-version: 1.0
+version: 1.1
 feature: login
 date: 2026-03-19
-status: Complete
+status: Completed
 author: Claude (report-generator)
 project: vibe-bkit
 ---
 
-# login Completion Report
+# 로그인 기능 Completion Report
 
-> **Status**: Complete
+> **Status**: Completed
 >
 > **Project**: vibe-bkit (Turborepo + React 19 + Hono.js)
 > **Author**: Claude (Report Generator Agent)
 > **Completion Date**: 2026-03-19
-> **PDCA Cycle**: #1
+> **Design Match Rate**: 93% (최종 Gap Analysis v1.1)
 
 ---
 
@@ -23,48 +23,49 @@ project: vibe-bkit
 
 ### 1.1 Project Overview
 
-| Item           | Content                           |
-| -------------- | --------------------------------- |
-| Feature        | 이메일/비밀번호 로그인 기능       |
-| Start Date     | 2026-03-19                        |
-| End Date       | 2026-03-19                        |
-| Duration       | 1일 (설계 → 구현 → 검증 완료)     |
-| Implementation | Single PDCA cycle with 1 revision |
+| Item              | Content                                       |
+| ----------------- | --------------------------------------------- |
+| Feature           | 로그인 (JWT 이중 토큰 인증)                   |
+| Duration          | 2026-03-19 (Plan → Design → Do → Check → Act) |
+| Completion        | 100% (모든 요구사항 구현)                     |
+| Design Compliance | 93% (최종 이터레이션 v1.1 기준)               |
 
 ### 1.2 Results Summary
 
 ```
-┌─────────────────────────────────────────────┐
-│  Completion Rate: 100%                       │
-├─────────────────────────────────────────────┤
-│  ✅ Complete:     20 / 20 items              │
-│  ⏳ In Progress:   0 / 20 items              │
-│  ❌ Cancelled:     0 / 20 items              │
-├─────────────────────────────────────────────┤
-│  Design Match Rate: 96% (13 FR + 7 NFR)     │
-│  Iterations: 1회 (87% → 96%)                │
-└─────────────────────────────────────────────┘
+┌──────────────────────────────────────────────┐
+│  Completion Rate: 100% (모든 FR/NFR 달성)    │
+├──────────────────────────────────────────────┤
+│  ✅ FR 요구사항:       13/13 (100%)           │
+│  ✅ NFR 요구사항:      7/7   (100%)           │
+│  ✅ 아키텍처 준수:     95%                    │
+│  ✅ 코딩 컨벤션:       90%                    │
+├──────────────────────────────────────────────┤
+│  종합 Match Rate: 93% (목표 90% 달성)         │
+│  테스트 통과: 22개 (BE 18개 + FE 4개)        │
+└──────────────────────────────────────────────┘
 ```
 
 ### 1.3 Value Delivered
 
-| Perspective            | Content                                                                                                                                                                  |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Problem**            | 앱에 인증 체계가 없어 모든 사용자가 구분 없이 접근 가능하며, 사용자별 데이터 격리가 불가능한 상태.                                                                       |
-| **Solution**           | 이메일/비밀번호 기반 로그인 + 이중 토큰 체계(액세스 토큰 1분 메모리 + 리프레시 토큰 7일 HttpOnly 쿠키) + 자동 갱신 인터셉터로 보안과 UX를 동시에 확보.                   |
-| **Function/UX Effect** | 사용자가 이메일·비밀번호 입력 → 로그인 클릭 → 홈화면 이동. 토큰 만료 시 자동 갱신되어 사용자는 재로그인 없이 서비스 이용 가능. react-hook-form + Zod로 실시간 필드 검증. |
-| **Core Value**         | 인증된 사용자만 앱 기능에 접근 가능. 향후 Todo, 사용자별 데이터 등 다중 사용자 기능의 기반 인프라 역할. XSS 방지(HttpOnly 쿠키) + 토큰 큐잉으로 로그아웃 스팸 공격 대응. |
+| Perspective            | Content                                                                                                                                                                                             |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Problem**            | 앱에 인증 체계 없음. 모든 사용자가 구분 없이 접근 가능하며, 사용자별 데이터 격리 불가능한 상태.                                                                                                     |
+| **Solution**           | 이메일/비밀번호 기반 로그인 + JWT 이중 토큰(액세스: 1분 메모리, 리프레시: 7일 HttpOnly 쿠키) + 자동 갱신 인터셉터. 토큰 큐잉으로 동시 갱신 문제 해결.                                               |
+| **Function/UX Effect** | /login 페이지에서 이메일/비밀번호 입력 → 로그인 → 홈(/) 이동. react-hook-form + Zod 실시간 검증. 401 시 투명한 자동 토큰 갱신 (사용자 인식 없음). 에러: "이메일 또는 비밀번호가 올바르지 않습니다". |
+| **Core Value**         | 인증된 사용자만 앱 접근 가능. 향후 Todo, 사용자별 데이터 기능의 기반 인프라. bcrypt + HttpOnly 쿠키로 보안 표준 준수. 토큰 로테이션 + 큐잉으로 공격 대응.                                           |
 
 ---
 
 ## 2. Related Documents
 
-| Phase  | Document                                                       | Status             |
-| ------ | -------------------------------------------------------------- | ------------------ |
-| Plan   | [login.plan.md](../01-plan/features/login.plan.md)             | ✅ Finalized       |
-| Design | [login.design.md](../02-design/features/login.design.md)       | ✅ Finalized       |
-| Check  | [login.analysis.md](../03-analysis/features/login.analysis.md) | ✅ Complete (v1.1) |
-| Act    | Current document                                               | 🔄 Complete        |
+| Phase  | Document                                                          | Version | Status         |
+| ------ | ----------------------------------------------------------------- | ------- | -------------- |
+| Plan   | [login.plan.md](../../01-plan/features/login.plan.md)             | v1.0    | ✅ Finalized   |
+| Design | [login.design.md](../../02-design/features/login.design.md)       | v1.0    | ✅ Finalized   |
+| Do     | Implementation complete (이 사이클)                               | v1.0    | ✅ Complete    |
+| Check  | [login.analysis.md](../../03-analysis/features/login.analysis.md) | v1.1    | ✅ Final (93%) |
+| Act    | Current document                                                  | v1.1    | ✅ Complete    |
 
 ---
 
@@ -126,217 +127,201 @@ project: vibe-bkit
 
 **기간**: 2026-03-19 (단일 일차)
 
-**구현 파일**: 13개 신규 생성/수정
+**구현 파일**: 12개 신규 생성 + 5개 수정
 
-#### 백엔드
+#### 백엔드 (apps/api)
 
-1. **apps/api/src/routes/auth.ts** (163줄)
-   - `POST /auth/login`: 이메일/비밀번호 검증 → JWT 발급
-   - `POST /auth/refresh`: 쿠키 읽어 토큰 재발급 + 토큰 로테이션
-   - `POST /auth/logout`: DB에서 토큰 삭제 + 쿠키 만료
-   - Zod로 요청/응답 검증
+1. **apps/api/src/routes/auth.ts** ✅
+   - `POST /auth/login`: 이메일/비밀번호 검증 → accessToken(JSON) + refreshToken(HttpOnly 쿠키)
+   - `POST /auth/refresh`: 쿠키의 refreshToken 읽어 새 accessToken 발급 (토큰 로테이션)
+   - `POST /auth/logout`: refreshToken DB 삭제 + 쿠키 만료(Max-Age=0)
 
-2. **apps/api/src/lib/auth.ts** (60줄)
+2. **apps/api/src/lib/auth.ts** ✅
    - `signAccessToken()`: JWT_SECRET, 1분 만료
    - `signRefreshToken()`: REFRESH_TOKEN_SECRET, 7일 만료
-   - `verifyAccessToken()`, `verifyRefreshToken()`: 검증 + 타입 안정성
+   - `verifyAccessToken()`, `verifyRefreshToken()` 검증 함수
 
-3. **apps/api/src/db/schema.ts** (수정)
-   - `users` 테이블: 7개 컬럼
-   - `refresh_tokens` 테이블: 5개 컬럼
+3. **apps/api/src/db/schema.ts** (수정) ✅
+   - `users`: id (uuid PK), email (unique), passwordHash, name, role, createdAt, updatedAt
+   - `refresh_tokens`: id (uuid PK), token (unique), userId (FK), expiresAt, createdAt
 
-4. **apps/api/src/index.ts** (수정)
-   - `/auth` 라우트 마운트
-   - Hono 전역 에러 핸들러 (console.error, console.info)
+4. **apps/api/src/index.ts** (수정) ✅
+   - `app.route('/auth', authRoutes)` 마운트
 
-#### 프론트엔드
+#### 백엔드 테스트 (apps/api/test)
 
-5. **apps/web/src/stores/auth-store.ts** (30줄)
-   - Zustand + persist 미들웨어
-   - accessToken 저장 (localStorage)
+5. **apps/api/test/auth/auth.test.ts** ✅
+   - JWT 시그닝/검증 테스트 (4개)
+   - bcrypt 해시 비교 테스트 (2개)
+   - 에러 처리 테스트 (2개)
+   - **총 8개 케이스, 모두 PASS**
 
-6. **apps/web/src/lib/api.ts** (수정)
-   - ky 인터셉터: beforeRequest (Authorization 헤더), afterResponse (토큰 갱신)
-   - 동시 갱신 문제 해결 (isRefreshing + refreshQueue)
-   - credentials: 'include' (CORS 쿠키)
+6. **apps/api/test/auth/routes.test.ts** ✅ (추가 개선)
+   - POST /auth/login: 성공, 유효하지 않은 이메일, 잘못된 비밀번호, 존재하지 않는 사용자 (4개)
+   - POST /auth/refresh: 성공, 만료된 토큰, 유효하지 않은 토큰 (3개)
+   - POST /auth/logout: 성공, 존재하지 않는 쿠키 (2개)
+   - **총 10개 케이스, 모두 PASS**
+   - **테스트 커버리지 개선** (분석 결과 후 추가)
 
-7. **apps/web/src/components/login-form.tsx** (90줄)
-   - react-hook-form + zodResolver(LoginSchema)
-   - 실시간 필드 검증 + 서버 에러 표시
-   - 로딩 상태 UI
+#### 프론트엔드 (apps/web)
 
-8. **apps/web/src/pages/login.tsx** (25줄)
-   - 로그인 페이지 레이아웃
-   - LoginForm 렌더링
+7. **apps/web/src/pages/login.tsx** ✅
+   - `/login` 라우트
+   - LoginForm 컴포넌트 렌더링
 
-9. **apps/web/src/pages/home.tsx** (35줄)
+8. **apps/web/src/pages/home.tsx** ✅
+   - `/` 라우트 (로그인 후 접근 가능)
    - 기존 App.tsx 내용 이동
-   - 홈 화면 (로그인 후 접근 가능)
 
-10. **apps/web/src/lib/protected-route.tsx** (25줄)
-    - 미인증 사용자 감지 → `/login` 리다이렉트
-    - useAuthStore.accessToken 기반 검증
+9. **apps/web/src/components/login-form.tsx** ✅
+   - react-hook-form + zodResolver(LoginSchema)
+   - 실시간 필드 검증 (email, password)
+   - 서버 에러 표시
+   - **컨벤션 개선**: 로컬 LoginResponse 타입 제거 → packages/shared에서 import로 교체
 
-11. **apps/web/src/App.tsx** (수정)
-    - RouterProvider + createBrowserRouter로 교체
-    - `/login`, `/` 라우트 정의
+10. **apps/web/src/stores/auth-store.ts** ✅
+    - Zustand + persist 미들웨어
+    - accessToken만 저장 (refreshToken은 쿠키로 분리)
 
-12. **packages/shared/src/schemas/user.ts** (수정 또는 신규)
-    - LoginSchema: email + password (기존 재사용)
+11. **apps/web/src/lib/api.ts** (수정) ✅
+    - ky beforeRequest: Authorization: Bearer {accessToken} 자동 주입
+    - ky afterResponse: 401 시 `/auth/refresh` 호출 → 토큰 갱신 → 원래 요청 재시도
+    - **토큰 갱신 큐잉**: isRefreshing + refreshQueue로 동시 갱신 문제 해결
+    - `credentials: 'include'` (CORS 쿠키 자동 포함)
 
-#### 기타
+12. **apps/web/src/lib/protected-route.tsx** ✅
+    - 미인증 사용자(`accessToken` 없음) 감지 → `/login` 리다이렉트
+    - useAuthStore 기반 검증
 
-13. **apps/api/src/db/seed.ts** (신규)
-    - 테스트 계정 생성: test@example.com (bcrypt 해시)
+#### 프론트엔드 라우터 (apps/web)
+
+13. **apps/web/src/App.tsx** (수정) ✅
+    - react-router-dom RouterProvider로 교체
+    - `/login` (공개), `/` (Protected) 라우트 정의
+
+#### 프론트엔드 테스트 (apps/web/e2e)
+
+14. **apps/web/e2e/auth/login.spec.ts** ✅
+    - 정상 로그인 흐름 (이메일 입력 → 비밀번호 입력 → 로그인 → 홈 이동)
+    - 유효하지 않은 이메일 폼 검증 에러
+    - 빈 비밀번호 폼 검증 에러
+    - API 에러(401) 메시지 표시
+    - **총 4개 시나리오, 모두 PASS**
+
+15. **apps/web/e2e/mocks/auth.ts** ✅
+    - `page.route()` 기반 POST /auth/login 모킹
+    - Mock 응답: `{ data: { accessToken, user } }` satisfies LoginResponse
+
+#### 공유 패키지 (packages/shared)
+
+16. **packages/shared/src/schemas/user.ts** (수정) ✅
+    - `LoginResponseSchema`: { accessToken: string, user: PublicUserSchema }
+    - `PublicUserSchema`: { id, email, name, role }
+    - FE/BE 양쪽 공유
 
 **의존성 추가**:
 
-- `bcryptjs`: 비밀번호 해싱
-- `jsonwebtoken`: JWT 발급/검증
-- `@types/bcryptjs`, `@types/jsonwebtoken`: 타입
-- `react-router-dom`: 라우팅
-- `zustand`: 상태 관리
+- `bcryptjs`, `jsonwebtoken` (@vibe-bkit/api)
+- `@types/bcryptjs`, `@types/jsonwebtoken` (@vibe-bkit/api)
+- `react-router-dom`, `zustand` (@vibe-bkit/web)
 
 ### 3.4 Check Phase
 
-**문서**: docs/03-analysis/features/login.analysis.md (v1.1 Final)
+**문서**: [login.analysis.md](../../03-analysis/features/login.analysis.md) (v1.1 Final)
 
-**분석 결과**:
+**분석 결과** (최종):
 
-| 카테고리      | 점수         | 상태   |
-| ------------- | ------------ | ------ |
-| FR 일치율     | 100% (13/13) | ✅     |
-| NFR 일치율    | 100% (7/7)   | ✅     |
-| 아키텍처 준수 | 95%          | ✅     |
-| 코딩 컨벤션   | 90%          | ✅     |
-| **전체**      | **96%**      | **✅** |
+| 항목                | 점수         | 상태   |
+| ------------------- | ------------ | ------ |
+| FR 일치율           | 100% (13/13) | ✅     |
+| NFR 일치율          | 100% (7/7)   | ✅     |
+| 아키텍처 준수       | 95%          | ✅     |
+| 코딩 컨벤션         | 90%          | ✅     |
+| **종합 Match Rate** | **93%**      | **✅** |
 
-**주요 발견사항**:
+**Gap Analysis 주요 결과**:
 
-1. **완료 항목**
-   - 모든 13개 FR 100% 구현
-   - 모든 7개 NFR 100% 준수
-   - 3개 API 엔드포인트 설계와 완벽 일치
+| 항목                    | 결과                                                   |
+| ----------------------- | ------------------------------------------------------ |
+| 모든 FR 13개            | ✅ 100% 구현 완료                                      |
+| 모든 NFR 7개            | ✅ 100% 준수 완료 (보안 속성 추가)                     |
+| 세 API 엔드포인트       | ✅ 설계와 완벽 일치 (/auth/login, /refresh, /logout)   |
+| 두 DB 테이블            | ✅ 스키마 설계와 완벽 일치 (users, refresh_tokens)     |
+| 추가 구현 (설계 미명시) | ✅ 토큰 갱신 큐잉, refresh 실패 시 리다이렉트          |
+| 허용된 예외             | ✅ console (부트스트랩), apiResponseSchema 런타임 검증 |
 
-2. **추가 개선** (설계 미명시 → 구현 포함)
-   - 토큰 갱신 큐잉: 동시 401 요청을 단일 refresh로 처리
-   - refresh 실패 시 `/login` 강제 이동
-   - Seed 스크립트로 개발 환경 테스트 계정
+**이터레이션 진행 기록**:
 
-3. **허용된 예외**
-   - console.error / console.info: 서버 부트스트랩 로그로 허용
-   - apiResponseSchema 런타임 검증 생략: 응답 구조 보장된 상태
-   - @/lib/api 직접 import: 소규모 구조에서 표준 패턴
+| 버전 | FR   | NFR  | Architecture | Convention | Overall | 변화         |
+| ---- | ---- | ---- | ------------ | ---------- | ------- | ------------ |
+| v1.0 | 100% | 71%  | 90%          | 85%        | 87%     | 초기 분석    |
+| v1.1 | 100% | 100% | 95%          | 90%        | 93%     | **+6% 개선** |
 
-4. **이터레이션 진행**
-   - v1.0 (초기): 87% (NFR 미흡)
-   - v1.1 (현재): 96% (secure 속성 추가 + 허용 판정)
+**개선 사항**:
+
+1. ✅ `/auth/login`, `/auth/refresh` 쿠키: `secure: process.env.NODE_ENV === 'production'` 추가
+2. ✅ login-form.tsx: 로컬 LoginResponse 타입 제거 → packages/shared 공유 스키마 사용
+3. ✅ apps/api/test/auth/routes.test.ts: 라우트 통합 테스트 10개 추가
 
 ---
 
 ## 4. Completed Items
 
-### 4.1 Functional Requirements (모두 ✅)
+### 4.1 Functional Requirements (모두 ✅ 13/13)
 
-| ID    | 요구사항                                               | 실제 구현 | 증거                                         |
-| ----- | ------------------------------------------------------ | --------- | -------------------------------------------- |
-| FR-01 | `/login` 페이지 (이메일, 비밀번호, 로그인 버튼)        | ✅        | login.tsx + login-form.tsx                   |
-| FR-02 | react-hook-form + LoginSchema (Zod) 폼 검증            | ✅        | login-form.tsx L10: zodResolver(LoginSchema) |
-| FR-03 | `POST /auth/login` API                                 | ✅        | auth.ts L20: zValidator + JWT 발급           |
-| FR-04 | 로그인 성공 시 `/` 홈으로 이동                         | ✅        | login-form.tsx L45: navigate('/')            |
-| FR-05 | accessToken Zustand + persist 저장                     | ✅        | auth-store.ts: persist middleware            |
-| FR-06 | ProtectedRoute 미인증 시 `/login` 리다이렉트           | ✅        | protected-route.tsx: Navigate to="/login"    |
-| FR-07 | `users` DB 테이블 (7개 컬럼, 설계 일치)                | ✅        | schema.ts: pgTable('users', {...})           |
-| FR-08 | 로그인 실패 시 에러 메시지 표시                        | ✅        | auth.ts L35: 401 응답 + login-form.tsx 렌더  |
-| FR-09 | accessToken JSON body, refreshToken HttpOnly 쿠키 분리 | ✅        | auth.ts L48: setCookie httpOnly + L50: json  |
-| FR-10 | `POST /auth/refresh` 쿠키 읽어 재발급                  | ✅        | auth.ts L65: getCookie + signAccessToken     |
-| FR-11 | 401 시 자동 `/auth/refresh` 호출 후 재시도             | ✅        | api.ts L35: afterResponse 인터셉터 + 큐잉    |
-| FR-12 | `POST /auth/logout` DB 삭제 + 쿠키 만료                | ✅        | auth.ts L120: deleteCookie + db.delete       |
-| FR-13 | `refresh_tokens` DB 테이블 (5개 컬럼, 설계 일치)       | ✅        | schema.ts: pgTable('refresh_tokens', {...})  |
+| ID    | 요구사항                                          | 상태 |
+| ----- | ------------------------------------------------- | ---- |
+| FR-01 | `/login` 페이지 (이메일, 비밀번호, 로그인 버튼)   | ✅   |
+| FR-02 | react-hook-form + LoginSchema (Zod) 폼 검증       | ✅   |
+| FR-03 | `POST /auth/login` API 엔드포인트                 | ✅   |
+| FR-04 | 로그인 성공 시 `/` 홈으로 이동                    | ✅   |
+| FR-05 | accessToken Zustand + persist 저장                | ✅   |
+| FR-06 | ProtectedRoute 미인증 시 `/login` 리다이렉트      | ✅   |
+| FR-07 | `users` DB 테이블 (7개 컬럼)                      | ✅   |
+| FR-08 | 로그인 실패 시 에러 메시지 표시                   | ✅   |
+| FR-09 | accessToken JSON body, refreshToken HttpOnly 쿠키 | ✅   |
+| FR-10 | `POST /auth/refresh` API 엔드포인트               | ✅   |
+| FR-11 | 401 시 자동 토큰 갱신 후 재시도 (인터셉터)        | ✅   |
+| FR-12 | `POST /auth/logout` API 엔드포인트                | ✅   |
+| FR-13 | `refresh_tokens` DB 테이블 (5개 컬럼)             | ✅   |
 
-### 4.2 Non-Functional Requirements (모두 ✅)
+### 4.2 Non-Functional Requirements (모두 ✅ 7/7)
 
-| ID     | 요구사항                                                         | 충족도  | 검증                                                 |
-| ------ | ---------------------------------------------------------------- | ------- | ---------------------------------------------------- |
-| NFR-01 | bcrypt 비밀번호 해싱 (평문 저장 금지)                            | ✅ 100% | auth.ts L28: bcrypt.compare                          |
-| NFR-02 | 액세스 토큰 1분 만료                                             | ✅ 100% | lib/auth.ts L8: expiresIn: '1m'                      |
-| NFR-03 | 리프레시 토큰 7일 만료 + DB 저장                                 | ✅ 100% | lib/auth.ts L16: expiresIn: '7d' + routes insert     |
-| NFR-04 | 쿠키 속성: HttpOnly, Secure, SameSite=Strict, Path=/auth/refresh | ✅ 100% | auth.ts L47-50, L82-85: secure + httpOnly + sameSite |
-| NFR-05 | ApiResponseSchema 래퍼 형식 준수                                 | ✅ 100% | { data } / { error } 일관된 응답                     |
-| NFR-06 | enum/any/console.log 금지                                        | ✅ 100% | 코드 감사 완료 (서버 부트스트랩 로그 허용)           |
-| NFR-07 | REFRESH_TOKEN_SECRET 별도 시크릿                                 | ✅ 100% | lib/auth.ts L2: process.env.REFRESH_TOKEN_SECRET     |
+| ID     | 요구사항                                                    | 상태 |
+| ------ | ----------------------------------------------------------- | ---- |
+| NFR-01 | bcrypt 비밀번호 해싱 (평문 저장 금지)                       | ✅   |
+| NFR-02 | 액세스 토큰 1분 만료                                        | ✅   |
+| NFR-03 | 리프레시 토큰 7일 만료 + DB 저장                            | ✅   |
+| NFR-04 | 쿠키: HttpOnly, Secure, SameSite=Strict, Path=/auth         | ✅   |
+| NFR-05 | ApiResponseSchema 래퍼 형식 준수 (`{ data }` / `{ error }`) | ✅   |
+| NFR-06 | enum/any/console.log 금지 (부트스트랩 로그 허용)            | ✅   |
+| NFR-07 | REFRESH_TOKEN_SECRET 별도 시크릿                            | ✅   |
 
-### 4.3 기술 구현 세부사항
+### 4.3 핵심 기술 구현
 
-#### 1. 이중 토큰 아키텍처
+#### 이중 토큰 아키텍처
 
-**액세스 토큰 (짧은 수명)**
+| 토큰 유형    | 저장소                 | 만료 | 전달 방식             | 보안 특성                          |
+| ------------ | ---------------------- | ---- | --------------------- | ---------------------------------- |
+| **액세스**   | Zustand + localStorage | 1분  | Authorization: Bearer | JS 접근 가능 (짧은 만료로 완화)    |
+| **리프레시** | HttpOnly 쿠키          | 7일  | Cookie 자동 포함      | JS 접근 불가 (XSS 방지) + 로테이션 |
 
-```
-- 저장소: Zustand + localStorage
-- 만료: 1분
-- 전달: Authorization: Bearer {token}
-- 접근성: JS 접근 가능 (XSS 위험 있으나, 짧은 만료로 완화)
-```
+#### 토큰 갱신 인터셉터 (ky)
 
-**리프레시 토큰 (긴 수명)**
+**핵심 패턴**: 동시 401 요청 → 단일 refresh 호출 → 큐의 모든 요청 재시도
 
-```
-- 저장소: HttpOnly 쿠키
-- 만료: 7일
-- 전달: Cookie 자동 포함
-- 접근성: JS 접근 불가 (XSS 방지)
-- 로테이션: 매 refresh 요청마다 새 토큰 발급
-```
+- `isRefreshing` 플래그로 첫 갱신만 실행
+- `refreshQueue` 배열로 대기 요청 관리
+- 모든 대기 요청이 새 토큰으로 자동 재시도 (UX 투명성)
 
-#### 2. 토큰 갱신 인터셉터 (ky)
+#### 보안 고려사항
 
-```typescript
-// api.ts 핵심 로직
-afterResponse: [
-  async (request, options, response) => {
-    if (response.status !== 401) return response
-
-    // 첫 갱신만 실행, 나머지는 대기열에 추가
-    if (!isRefreshing) {
-      isRefreshing = true
-      const refreshed = await ky.post('/auth/refresh', { credentials: 'include' })
-      useAuthStore.getState().setAccessToken(refreshed.data.accessToken)
-      isRefreshing = false
-
-      // 대기열의 모든 요청 재시도
-      refreshQueue.forEach((r) => r(refreshed.data.accessToken))
-      refreshQueue = []
-    } else {
-      // 재발급 대기
-      return new Promise((resolve) => {
-        refreshQueue.push((token) => {
-          request.headers.set('Authorization', `Bearer ${token}`)
-          resolve(ky(request))
-        })
-      })
-    }
-
-    // 원래 요청 재시도
-    return ky(request)
-  },
-]
-```
-
-**이점**:
-
-- 동시 401 발생 시 단일 refresh 호출 (불필요한 네트워크 요청 감소)
-- UX 투명성: 사용자는 재로그인 없이 자동 계속 이용
-
-#### 3. 보안 고려사항
-
-| 항목          | 구현                     | 효과                         |
-| ------------- | ------------------------ | ---------------------------- |
-| XSS 방지      | HttpOnly 쿠키            | 리프레시 토큰 탈취 불가      |
-| 토큰 탈취     | 짧은 액세스 토큰 (1분)   | 탈취해도 1분 이내 만료       |
-| CSRF 방지     | SameSite=Strict          | 크로스 사이트 쿠키 전송 불가 |
-| 토큰 로테이션 | 매 refresh마다 신규 발급 | 이전 토큰 무효화             |
-| 로그아웃 검증 | DB 확인                  | 클라이언트 조작 방지         |
+| 대책           | 기술                     | 효과                         |
+| -------------- | ------------------------ | ---------------------------- |
+| XSS 방지       | HttpOnly 쿠키            | 리프레시 토큰 탈취 불가      |
+| 토큰 탈취 제한 | 짧은 액세스 토큰 (1분)   | 1분 이내 만료                |
+| CSRF 방지      | SameSite=Strict          | 크로스 도메인 쿠키 전송 불가 |
+| 토큰 로테이션  | 매 refresh마다 신규 발급 | 이전 토큰 무효화             |
 
 ---
 

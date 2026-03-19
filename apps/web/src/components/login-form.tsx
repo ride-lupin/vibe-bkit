@@ -2,16 +2,9 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
-import { LoginSchema, type Login } from '@vibe-bkit/shared'
+import { LoginSchema, type Login, type LoginResponse } from '@vibe-bkit/shared'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth-store'
-
-type LoginResponse = {
-  data: {
-    accessToken: string
-    user: { id: string; email: string; name: string; role: string }
-  }
-}
 
 export function LoginForm() {
   const navigate = useNavigate()
