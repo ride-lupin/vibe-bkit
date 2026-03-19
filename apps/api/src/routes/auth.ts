@@ -3,7 +3,7 @@ import { getCookie, setCookie, deleteCookie } from 'hono/cookie'
 import { zValidator } from '@hono/zod-validator'
 import bcrypt from 'bcryptjs'
 import { eq } from 'drizzle-orm'
-import { LoginSchema } from '@vibe-bkit/shared'
+import { LoginSchema, LoginResponseSchema } from '@vibe-bkit/shared'
 import { db } from '../db'
 import { users, refreshTokens } from '../db/schema'
 import {
@@ -54,12 +54,14 @@ auth.post('/login', zValidator('json', LoginSchema), async (c) => {
     maxAge: REFRESH_TOKEN_MAX_AGE,
   })
 
-  return c.json({
-    data: {
-      accessToken,
-      user: { id: user.id, email: user.email, name: user.name, role: user.role },
-    },
-  })
+  return c.json(
+    LoginResponseSchema.parse({
+      data: {
+        accessToken,
+        user: { id: user.id, email: user.email, name: user.name, role: user.role },
+      },
+    }),
+  )
 })
 
 // POST /auth/refresh

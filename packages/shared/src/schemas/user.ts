@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { BaseEntitySchema } from './common'
+import { BaseEntitySchema, apiResponseSchema } from './common'
 
 // ============================================================
 // Constants (Literal Unions)
@@ -48,6 +48,24 @@ export const LoginSchema = z.object({
   password: z.string().min(1),
 })
 
+// --- Auth Response Schemas ---
+
+/** 로그인 응답에 포함되는 공개 유저 정보 (createdAt/updatedAt 제외) */
+export const PublicUserSchema = UserSchema.pick({
+  id: true,
+  email: true,
+  name: true,
+  role: true,
+})
+
+/** 로그인 성공 응답 */
+export const LoginResponseSchema = apiResponseSchema(
+  z.object({
+    accessToken: z.string(),
+    user: PublicUserSchema,
+  }),
+)
+
 // ============================================================
 // Inferred Types
 // ============================================================
@@ -57,3 +75,5 @@ export type User = z.infer<typeof UserSchema>
 export type CreateUser = z.infer<typeof CreateUserSchema>
 export type UpdateUser = z.infer<typeof UpdateUserSchema>
 export type Login = z.infer<typeof LoginSchema>
+export type PublicUser = z.infer<typeof PublicUserSchema>
+export type LoginResponse = z.infer<typeof LoginResponseSchema>

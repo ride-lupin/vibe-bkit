@@ -19,6 +19,9 @@ dist/
 .next/
 out/
 
+# TypeScript
+*.tsbuildinfo
+
 # Turborepo 캐시
 .turbo/
 
@@ -27,5 +30,10 @@ out/
 
 # macOS
 .DS_Store
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/
 
 .serena

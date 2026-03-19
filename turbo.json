@@ -18,7 +18,9 @@
       "dependsOn": ["^typecheck"]
     },
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "test/**", "e2e/**", "vitest.config.ts", "playwright.config.ts"],
+      "outputs": ["test-results/**", "playwright-report/**"]
     }
   }
 }

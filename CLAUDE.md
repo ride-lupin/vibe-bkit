@@ -30,12 +30,20 @@ Turborepo 모노레포 기반 풀스택 웹 애플리케이션 (React 19 + Vite 
 - 개발 의존성: `pnpm add -D {package}`
 - 워크스페이스 루트: `pnpm add -w {package}`
 
+### shared 패키지 타입 해석
+
+`packages/shared/package.json`의 `exports.".".types`는 `./src/index.ts`(소스 직접)로 설정되어 있다.
+TypeScript가 항상 소스에서 타입을 해석하므로, **shared 수정 후 별도 빌드 없이 즉시 타입 반영**된다.
+`dist/`는 외부 npm 배포 시에만 사용된다. 이 설정을 `./dist/index.d.ts`로 되돌리지 말 것.
+
 ## 개발 순서
 
 1. 변경 사항 작성
 2. 타입체크: `pnpm typecheck`
 3. 린트: `pnpm lint`
-4. 테스트: `pnpm test`
+4. 테스트: `pnpm test` — API 단위테스트(Vitest) + 프런트 E2E(Playwright)
+   - API만: `pnpm --filter @vibe-bkit/api test`
+   - Web만: `pnpm --filter @vibe-bkit/web test`
 5. 빌드 확인: `pnpm build`
 6. Turborepo 전체 빌드: `turbo build`
 
@@ -45,15 +53,56 @@ Turborepo 모노레포 기반 풀스택 웹 애플리케이션 (React 19 + Vite 
 /
 ├── CLAUDE.md
 ├── apps/
-│   ├── web/          # React 19 + Vite 프런트엔드
-│   └── api/          # Hono.js 백엔드
+│   ├── web/                    # React 19 + Vite 프런트엔드
+│   │   ├── playwright.config.ts
+│   │   └── e2e/                # Playwright E2E 테스트
+│   │       ├── mocks/          # page.route() API 모킹
+│   │       └── auth/           # 인증 E2E 시나리오
+│   └── api/                    # Hono.js 백엔드
+│       ├── vitest.config.ts
+│       ├── src/
+│       │   ├── app.ts          # Hono app 팩토리 (serve 제외)
+│       │   └── index.ts        # serve() 진입점
+│       └── test/               # Vitest 단위테스트
+│           └── auth/           # JWT/인증 유닛 테스트
 ├── docs/
-│   └── features/     # FE/BE 공유 풀스택 PRD 문서
+│   └── features/               # FE/BE 공유 풀스택 PRD 문서
 ├── packages/
-│   └── shared/       # 공유 타입, Zod 스키마, 유틸리티
-├── turbo.json        # Turborepo 설정
+│   └── shared/                 # 공유 타입, Zod 스키마, 유틸리티
+├── turbo.json                  # Turborepo 설정
 └── pnpm-workspace.yaml
 ```
+
+## PDCA Do 단계 — 테스트 동반 구현 규칙
+
+**Do 단계에서 코드를 구현할 때 테스트 코드를 반드시 함께 작성하고 실행한다.**
+
+### 백엔드 (apps/api) — Vitest 단위 테스트
+
+- 새 비즈니스 로직 구현 시 `apps/api/test/` 아래에 대응하는 테스트 파일 작성
+- 파일 위치: `apps/api/test/{domain}/{module}.test.ts`
+- DB 의존 없이 순수 로직만 단위 테스트 (Hono `app.request()`로 라우트 테스트 가능)
+- 구현 후 실행: `pnpm --filter @vibe-bkit/api test test/{domain}/{module}.test.ts`
+
+### 프런트엔드 (apps/web) — Playwright E2E (spec + mock API)
+
+- 새 페이지/기능 구현 시 `apps/web/e2e/` 아래에 대응하는 스펙 파일 작성
+- API 호출은 `page.route()`로 모킹 — 실 서버 불필요, 프로덕션 코드 수정 불필요
+- 파일 위치: `apps/web/e2e/{domain}/{feature}.spec.ts`
+- 공통 mock: `apps/web/e2e/mocks/{domain}.ts`
+- Mock 응답 body는 `@vibe-bkit/shared`의 응답 타입을 `satisfies`로 적용하여 BE 스키마와 동기화
+- 구현 후 실행: `pnpm --filter @vibe-bkit/web test e2e/{domain}/{feature}.spec.ts`
+
+### Do 단계 완료 조건 (이 순서로 실행)
+
+```bash
+pnpm typecheck          # 1. 타입 오류 없음
+pnpm lint               # 2. 린트 통과
+pnpm --filter @vibe-bkit/api test test/{domain}/{module}.test.ts   # 3. 구현한 도메인만
+pnpm --filter @vibe-bkit/web test e2e/{domain}/{feature}.spec.ts   # 4. 구현한 기능만
+```
+
+4가지 모두 통과한 후에만 Check 단계(`/pdca analyze`)로 진행한다.
 
 ## 코딩 컨벤션
 
