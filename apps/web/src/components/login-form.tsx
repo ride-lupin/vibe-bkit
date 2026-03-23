@@ -37,42 +37,39 @@ export function LoginForm() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '320px' }}
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-80">
       <div>
-        <label htmlFor="email">이메일</label>
+        <label htmlFor="email" className="text-sm font-medium text-gray-700">
+          이메일
+        </label>
         <input
           id="email"
           type="email"
           {...register('email')}
-          style={{ display: 'block', width: '100%', padding: '0.5rem', marginTop: '0.25rem' }}
+          className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        {errors.email && (
-          <span style={{ color: 'red', fontSize: '0.875rem' }}>{errors.email.message}</span>
-        )}
+        {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
       </div>
 
       <div>
-        <label htmlFor="password">비밀번호</label>
+        <label htmlFor="password" className="text-sm font-medium text-gray-700">
+          비밀번호
+        </label>
         <input
           id="password"
           type="password"
           {...register('password')}
-          style={{ display: 'block', width: '100%', padding: '0.5rem', marginTop: '0.25rem' }}
+          className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        {errors.password && (
-          <span style={{ color: 'red', fontSize: '0.875rem' }}>{errors.password.message}</span>
-        )}
+        {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
       </div>
 
-      {serverError && <p style={{ color: 'red', fontSize: '0.875rem' }}>{serverError}</p>}
+      {serverError && <p className="text-red-500 text-sm">{serverError}</p>}
 
       <button
         type="submit"
         disabled={loginMutation.isPending}
-        style={{ padding: '0.75rem', cursor: 'pointer' }}
+        className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loginMutation.isPending ? '로그인 중...' : '로그인'}
       </button>

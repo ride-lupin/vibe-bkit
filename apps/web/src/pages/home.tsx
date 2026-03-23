@@ -19,20 +19,20 @@ export function HomePage() {
   })
 
   return (
-    <main style={{ padding: '2rem' }}>
-      <h1>홈</h1>
+    <main className="p-8 max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold mb-6">홈</h1>
       {isLoading ? (
-        <p>불러오는 중...</p>
+        <p className="text-gray-500">불러오는 중...</p>
       ) : profile ? (
         <section>
-          <dl>
-            <dt>이름</dt>
+          <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
+            <dt className="font-medium text-gray-500">이름</dt>
             <dd>{profile.data.name}</dd>
-            <dt>이메일</dt>
+            <dt className="font-medium text-gray-500">이메일</dt>
             <dd>{profile.data.email}</dd>
-            <dt>권한</dt>
+            <dt className="font-medium text-gray-500">권한</dt>
             <dd>{profile.data.role}</dd>
-            <dt>연락처</dt>
+            <dt className="font-medium text-gray-500">연락처</dt>
             <dd>{profile.data.phone}</dd>
           </dl>
         </section>
@@ -40,7 +40,7 @@ export function HomePage() {
       <button
         onClick={() => logoutMutation.mutate()}
         disabled={logoutMutation.isPending}
-        style={{ marginTop: '1rem', padding: '0.5rem 1rem', cursor: 'pointer' }}
+        className="mt-6 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {logoutMutation.isPending ? '로그아웃 중...' : '로그아웃'}
       </button>
