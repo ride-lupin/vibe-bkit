@@ -1,6 +1,8 @@
 import ky, { type BeforeRequestHook, type AfterResponseHook } from 'ky'
 import { useAuthStore } from '@/stores/auth-store'
 
+const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
+
 const injectToken: BeforeRequestHook = (request) => {
   const token = useAuthStore.getState().accessToken
   if (token) {
@@ -26,7 +28,7 @@ const handleTokenRefresh: AfterResponseHook = async (request, _options, response
   isRefreshing = true
   try {
     const result = await ky
-      .post(`${import.meta.env.VITE_API_URL ?? 'http://localhost:3000'}/auth/refresh`, {
+      .post(`${API_BASE}/auth/refresh`, {
         credentials: 'include',
       })
       .json<{ data: { accessToken: string } }>()
@@ -48,10 +50,24 @@ const handleTokenRefresh: AfterResponseHook = async (request, _options, response
 }
 
 export const api = ky.create({
-  prefixUrl: import.meta.env.VITE_API_URL ?? 'http://localhost:3000',
+  prefixUrl: API_BASE,
   credentials: 'include',
   hooks: {
     beforeRequest: [injectToken],
     afterResponse: [handleTokenRefresh],
   },
 })
+
+export async function silentRefresh(): Promise<void> {
+  const { setAccessToken, setAuthLoading } = useAuthStore.getState()
+  try {
+    const result = await ky
+      .post(`${API_BASE}/auth/refresh`, { credentials: 'include' })
+      .json<{ data: { accessToken: string } }>()
+    setAccessToken(result.data.accessToken)
+  } catch {
+    // Refresh Token 없음/만료 → 미인증 상태 유지
+  } finally {
+    setAuthLoading(false)
+  }
+}

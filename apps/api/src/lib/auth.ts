@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import { randomUUID } from 'node:crypto'
 
 const ACCESS_SECRET = process.env.JWT_SECRET!
 const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET!
@@ -7,10 +8,10 @@ type AccessPayload = { sub: string; role: string }
 type RefreshPayload = { sub: string }
 
 export const signAccessToken = (payload: AccessPayload): string =>
-  jwt.sign(payload, ACCESS_SECRET, { expiresIn: '1m' })
+  jwt.sign(payload, ACCESS_SECRET, { expiresIn: '15m' })
 
 export const signRefreshToken = (payload: RefreshPayload): string =>
-  jwt.sign(payload, REFRESH_SECRET, { expiresIn: '7d' })
+  jwt.sign({ ...payload, jti: randomUUID() }, REFRESH_SECRET, { expiresIn: '7d' })
 
 export const verifyAccessToken = (token: string): AccessPayload =>
   jwt.verify(token, ACCESS_SECRET) as AccessPayload

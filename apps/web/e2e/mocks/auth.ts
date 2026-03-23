@@ -40,3 +40,23 @@ export async function mockLoginFailure(page: Page): Promise<void> {
     })
   })
 }
+
+const refreshSuccessBody = {
+  data: { accessToken: 'mock-refreshed-token' },
+}
+
+export async function mockRefreshSuccess(page: Page): Promise<void> {
+  await page.route(`${API_URL}/auth/refresh`, (route) => {
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(refreshSuccessBody),
+    })
+  })
+}
+
+export async function mockRefreshFailure(page: Page): Promise<void> {
+  await page.route(`${API_URL}/auth/refresh`, (route) => {
+    route.fulfill({ status: 401 })
+  })
+}

@@ -6,3 +6,4 @@
 | schemas                | completed | 100%       | 2026-03-19 | [schemas/](./schemas/)                               |
 | frontend-service-layer | completed | 100%       | 2026-03-19 | [frontend-service-layer/](./frontend-service-layer/) |
 | user-profile           | completed | 100%       | 2026-03-19 | [user-profile/](./user-profile/)                     |
+| token-security         | completed | 95%+       | 2026-03-23 | [token-security/](./token-security/)                 |

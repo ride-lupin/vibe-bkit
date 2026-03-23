@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test'
-import { mockLoginSuccess, mockLoginFailure } from '../mocks/auth'
+import { mockLoginSuccess, mockLoginFailure, mockRefreshFailure } from '../mocks/auth'
 import { mockProfileSuccess } from '../mocks/user'
 
 test.describe('로그인 페이지', () => {
   test.beforeEach(async ({ page }) => {
+    await mockRefreshFailure(page)
     await page.goto('/login')
   })
 
