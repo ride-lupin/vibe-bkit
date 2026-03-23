@@ -97,6 +97,33 @@ TypeScript가 항상 소스에서 타입을 해석하므로, **shared 수정 후
   - 단 1개 컴포넌트에서만 사용 → 해당 컴포넌트 내부 인라인
   - 2개 이상 컴포넌트에서 공통 사용 → `hooks/{domain}/{hookName}.ts`에 추출
 
+## 프론트엔드 스킬 참조 규칙
+
+`apps/web/src/` 하위 React 컴포넌트 작업 시 아래 규칙을 반드시 따를 것.
+
+### 자동 참조 (항상 적용)
+
+- **컴포넌트 작성/수정/리팩토링**: `frontend-standards` 로컬 스킬 규칙 적용
+  - Re-render 최적화: `useEffect`로 상태 파생 금지, 함수형 setState, useMemo 활용
+  - Waterfall 제거: 독립적 비동기 작업은 `Promise.all()` 병렬 실행
+  - Bundle 최적화: barrel import 금지 (직접 경로 import), 조건부 컴포넌트는 `React.lazy()`
+  - React Query v5: `services/{domain}/queries.ts` 옵션 팩토리 필수 경유
+  - Tailwind CSS v4: 인라인 스타일 금지, 조건부 클래스는 `cn()` 사용
+  - Radix UI: `asChild` 패턴, 접근성 속성(aria-\*) 필수
+
+### 명시적 호출
+
+- **UI 코드 리뷰 요청 시**: `/web-design-guidelines` 실행
+- **PR 리뷰 시**: `/react-pr-review` 실행
+
+### 적용 제외 (Next.js 전용)
+
+이 프로젝트는 React 19 + Vite 기반이므로 아래는 적용하지 않는다:
+
+- `server-*` 규칙 (RSC, Server Actions 없음)
+- `next/dynamic` → `React.lazy()` 사용
+- `rendering-hydration-*` (SSR 없음)
+
 ## 금지 사항
 
 - ❌ `console.log` 사용 (개발 중 임시 사용 후 반드시 제거)
